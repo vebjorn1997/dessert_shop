@@ -1,0 +1,87 @@
+name: Autograding Tests
+on:
+  push
+  workflow_dispatch
+  repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Verify submitted files
+      run: |
+        expected_files=("dessert.py" "test_dessert.py" "dessertshop.py" "test_candy.py" "test_cookie.py" "test_icecream.py" "test_sundae.py")
+        for file in "${expected_files[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "Error: $file is missing."
+            exit 1
+          fi
+        done
+        echo "All expected files are present."
+
+    - name: Exclude unexpected files
+      run: |
+        unexpected_files=$(find . -type f ! -name 'dessert.py' ! -name 'test_dessert.py' ! -name 'dessertshop.py' ! -name 'test_candy.py' ! -name 'test_cookie.py' ! -name 'test_icecream.py' ! -name 'test_sundae.py' ! -name '.github' ! -name '.git')
+        if [ -n "$unexpected_files" ]; then
+          echo "Warning: Found unexpected files: $unexpected_files"
+          exit 1
+        fi
+        echo "No unexpected files found."
+
+    - name: Run the code
+      run: |
+        python3 dessertshop.py
+
+    - name: Install pytest
+      run: |
+        pip install pytest
+
+    - name: Run pytest
+      id: pytest
+      run: |
+        pytest > result.log
+        if grep -q "FAILURES" result.log; then
+          echo "Tests failed."
+          exit 1
+        else
+          echo "All tests passed."
+        fi
+
+    - name: Install ruff
+      run: |
+        pip install ruff
+
+    - name: Format the code using ruff
+      run: |
+        ruff format dessert.py
+        ruff format test_dessert.py
+        ruff format dessertshop.py
+        ruff format test_candy.py
+        ruff format test_cookie.py
+        ruff format test_icecream.py
+        ruff format test_sundae.py
+
+    - name: Check formatting with ruff
+      run: |
+        ruff check dessert.py
+        ruff check test_dessert.py
+        ruff check dessertshop.py
+        ruff check test_candy.py
+        ruff check test_cookie.py
+        ruff check test_icecream.py
+        ruff check test_sundae.py
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      with:
+        runners: format-check
+      env:
+        FORMAT_CHECK_RESULTS: "${{ steps.format-check.outputs.result }}"
+ 
