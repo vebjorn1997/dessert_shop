@@ -75,39 +75,39 @@ Your generated PDF receipt format and values should match what is here.
 |Order Total||$8.56| 
 |Total items in the order||6|
 
-# Key Requirements (Ed Note: Remove this after check50 checks are created to check this.)
+# Key Requirements
 1. attribute `tax_percent` is in DessertItem class
 1. method `calculate_cost` is abstract in DessertItem and concrete in all inheriting subclasses
 1. method `calculate_tax` is concrete in DessertItem and is **NOT** overrriden in any inheriting subclasses
 1. pytest test cases have been created or modified as described above
 1. PDF receipt output file should look similar to the sample run shown above
 1. Your workspace should have the following 7 files:
-    * desserts.py
+    * dessert.py
     * dessertshop.py
     * test_dessert.py
     * test_candy.py
     * test_cookie.py
     * test_icecream.py
     * test_sundae.py
-    This way you don't end up with one huge test file.
 
-##  How to Test
-* Try creating orders of different sizes.
-* Try generating an empty order, 1 item, and the example order shown.
-  
+This way you don't end up with one huge test file.
+
 ## Correctness
-In your terminal, execute `check50` to check your work’s correctness.
+From your terminal, run `ruff check` on each of the 7 files above, such as:
+`ruff check dessert.py` 
+`ruff check dessertshop.py` 
+`ruff check test_dessert.py`  
+...
 
-`check50 cs1420/problems/2024/x/ds/3`
+This will check for syntax errors, violations and many issues that could lead to bugs in your code.
+Code will be maually graded, so any score received are partial.
 
 ## Style
-Execute the below to evaluate the style of your code using `style50`.
+From your terminal, run `ruff format` on each of the 7 files above to check the format of your code:
 
-`style50 desserts.py`
-
-`style50 dessertshop.py`
+`ruff format dessert.py`  
+`ruff format dessertshop.py` 
+`ruff format test_dessert.py`
 
 ## How to Submit
-In your terminal, execute the below to submit your work.
-
-`submit50 cs1420/problems/2024/x/walk`
+From your Github assignment repository page, click Submit and enter a nontrivial commit message.
