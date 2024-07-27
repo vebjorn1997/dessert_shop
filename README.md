@@ -103,10 +103,10 @@ This will check for syntax errors, violations and many issues that could lead to
 Code will be maually graded, so any score received are partial.
 
 ## Style
-From your terminal, run `ruff format` on each of the 7 files above to check the format of your code:
+From your terminal, run `ruff format` on each of the 7 files above to check the format of your code, like:
 
-`ruff format dessert.py`  
-`ruff format dessertshop.py` 
+`ruff format dessert.py`   
+`ruff format dessertshop.py`  
 `ruff format test_dessert.py`
 
 ## How to Submit
