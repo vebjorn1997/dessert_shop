@@ -1,4 +1,4 @@
-# Dessert Shop Part 3
+# Dessert Shop Part 3 -- CS 1420 Version
 
 Read instructions carefully. Not following instructions will result in not getting the credit you want.
 
@@ -110,4 +110,20 @@ From your terminal, run `ruff format` on each of the 7 files above to check the 
 `ruff format test_dessert.py`
 
 ## How to Submit
-From your Github assignment repository page, click Submit and enter a nontrivial commit message.
+From your Github assignment repository page, click Commit and enter a nontrivial commit message.
+
+# Grading
+
+| Criteria | Mastery (100 points) | Proficient (85 points) | Developing (70 points) | Beginning (60 points) | Not Demonstrated (50 points) |
+|----------|----------------------|------------------------|------------------------|-----------------------|-----------------------------|
+| **Tax_percent attribute** | Tax_percent attribute is correctly implemented in DessertItem class. | Tax_percent attribute is implemented in DessertItem class, but there are some minor errors. | Tax_percent attribute is present but not correctly implemented. | Tax_percent attribute is attempted but fundamentally flawed. | Tax_percent attribute is not implemented. |
+| **Abstract calculate_cost method** | Correctly implemented as an abstract method in DessertItem and correctly overridden in all inheriting subclasses. | Correctly implemented as an abstract method in DessertItem, but there are some errors in the implementation in subclasses. | Calculate_cost method is present but not correctly implemented as an abstract method or correctly overridden. | Calculate_cost method is attempted but fundamentally flawed. | Calculate_cost method is not implemented. |
+| **Calculate_tax method** | Correctly implemented in DessertItem and not overridden in any inheriting subclasses. | Correctly implemented in DessertItem, but there are some minor errors. | Calculate_tax method is present but not correctly implemented. | Calculate_tax method is attempted but fundamentally flawed. | Calculate_tax method is not implemented. |
+| **Test cases** | All required pytest test cases have been created and all tests pass. | All required pytest test cases have been created but some tests do not pass. | Some required pytest test cases are missing or there are significant errors. | Test cases are attempted but fundamentally flawed. | No or very few correct pytest test cases. |
+| **Receipt generation** | PDF receipt is correctly generated and matches the example in both format and values. | PDF receipt is generated, but there are some errors in the format or values. | Some attempt has been made to generate the receipt, but it is significantly incorrect. | Receipt generation is attempted but fundamentally flawed. | No attempt has been made to generate the receipt. |
+| **Code organization** | Code is correctly divided into the 7 required files. | Code is divided into files, but not exactly as specified. | Some attempt has been made to divide the code into files, but there are significant errors. | Code organization is attempted but fundamentally flawed. | Code is not divided into separate files. |
+| **`ruff checks`** | Code passes all `ruff checks` for syntax errors, violations, and potential bugs. | Code passes most `ruff checks` for syntax errors, violations, and potential bugs. | Code passes some `ruff checks` for syntax errors, violations, and potential bugs. | Code passes few `ruff checks` for syntax errors, violations, and potential bugs. | Code fails `ruff checks` for syntax errors, violations, and potential bugs. |
+
+Students should strive for mastery level. Lower than that indicates areas where more practice is needed or more learning is needed. Code score is the average of the individual feature scores.
+
+Total score is 1/4 * style score + 3/4 * code_score.
