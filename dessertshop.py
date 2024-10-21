@@ -2,6 +2,7 @@ from dessert import DessertItem, Candy, Cookie, IceCream, Sundae
 
 
 class Order:
+    """Order class for the dessert shop, holds a list of DessertItems"""
     def __init__(self):
         self.order: list[DessertItem] = []
 

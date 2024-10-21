@@ -1,4 +1,12 @@
+"""Classes for all dessert items"""
+
+
 class DessertItem:
+    """Base class for all dessert items
+    Arguments:
+    - name
+    """
+
     def __init__(self, name: str):
         self.name = name
 
@@ -7,6 +15,13 @@ class DessertItem:
 
 
 class Candy(DessertItem):
+    """Candy class, inherits from DessertItem
+    Arguments:
+    - name,
+    - candy_weight,
+    - price_per_pound
+    """
+
     def __init__(self, name: str, candy_weight: float, price_per_pound: float):
         super().__init__(name)
         self.candy_weight = candy_weight
@@ -14,6 +29,13 @@ class Candy(DessertItem):
 
 
 class Cookie(DessertItem):
+    """Cookie class, inherits from DessertItem
+    Arguments:
+    - name,
+    - cookie_quantity,
+    - price_per_dozen
+    """
+
     def __init__(self, name: str, cookie_quantity: int, price_per_dozen: float):
         super().__init__(name)
         self.cookie_quantity = cookie_quantity
@@ -21,6 +43,13 @@ class Cookie(DessertItem):
 
 
 class IceCream(DessertItem):
+    """IceCream class, inherits from DessertItem
+    Arguments:
+    - name,
+    - scoop_count,
+    - price_per_scoop
+    """
+
     def __init__(self, name: str, scoop_count: int, price_per_scoop: float):
         super().__init__(name)
         self.scoop_count = scoop_count
@@ -28,6 +57,15 @@ class IceCream(DessertItem):
 
 
 class Sundae(IceCream):
+    """Sundae class, inherits from IceCream
+    Arguments:
+    - name,
+    - scoop_count,
+    - price_per_scoop,
+    - topping_name
+    - topping_price
+    """
+
     def __init__(
         self,
         name: str,
