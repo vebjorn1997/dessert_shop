@@ -7,7 +7,6 @@ class Candy(DessertItem):
         super().__init__(name)
         self.candy_weight = candy_weight
         self.price_per_pound = price_per_pound
-        print(self.name)
     
 class Cookie(DessertItem):
     def __init__(self, name: str, cookie_quantity: int, price_per_dozen: float):
