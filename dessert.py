@@ -1,7 +1,9 @@
+from abc import ABC, abstractmethod
+
 """Classes for all dessert items"""
 
 
-class DessertItem:
+class DessertItem(ABC):
     """Base class for all dessert items
     Arguments:
     - name
@@ -9,9 +11,18 @@ class DessertItem:
 
     def __init__(self, name: str):
         self.name = name
+        self.tax_percent = 7.25
+
+    @abstractmethod
+    def calculate_cost(self) -> float:
+        pass
 
     def __str__(self):
         return self.name
+
+    def calculate_tax(self) -> float:
+        return self.calculate_cost() * self.tax_percent / 100
+
 
 
 class Candy(DessertItem):
@@ -27,6 +38,9 @@ class Candy(DessertItem):
         self.candy_weight = candy_weight
         self.price_per_pound = price_per_pound
 
+    def calculate_cost(self) -> float:
+        return self.candy_weight * self.price_per_pound
+
 
 class Cookie(DessertItem):
     """Cookie class, inherits from DessertItem
@@ -40,6 +54,9 @@ class Cookie(DessertItem):
         super().__init__(name)
         self.cookie_quantity = cookie_quantity
         self.price_per_dozen = price_per_dozen
+
+    def calculate_cost(self) -> float:
+        return self.cookie_quantity * self.price_per_dozen / 12
 
 
 class IceCream(DessertItem):
@@ -55,6 +72,8 @@ class IceCream(DessertItem):
         self.scoop_count = scoop_count
         self.price_per_scoop = price_per_scoop
 
+    def calculate_cost(self) -> float:
+        return self.scoop_count * self.price_per_scoop
 
 class Sundae(IceCream):
     """Sundae class, inherits from IceCream
@@ -77,3 +96,6 @@ class Sundae(IceCream):
         super().__init__(name, scoop_count, price_per_scoop)
         self.topping_name = topping_name
         self.topping_price = topping_price
+
+    def calculate_cost(self) -> float:
+        return super().calculate_cost() + self.topping_price
