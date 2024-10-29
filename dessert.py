@@ -1,7 +1,9 @@
 """Classes for all dessert items"""
 
+from abc import ABC, abstractmethod
 
-class DessertItem:
+
+class DessertItem(ABC):
     """Base class for all dessert items
     Arguments:
     - name
@@ -9,9 +11,17 @@ class DessertItem:
 
     def __init__(self, name: str):
         self.name = name
+        self.tax_percent = 7.25
 
     def __str__(self):
         return self.name
+
+    @abstractmethod
+    def calculate_cost(self) -> float:
+        pass
+
+    def calculate_tax(self) -> float:
+        return round(self.calculate_cost() * self.tax_percent / 100, 2)
 
 
 class Candy(DessertItem):
@@ -27,6 +37,10 @@ class Candy(DessertItem):
         self.candy_weight = candy_weight
         self.price_per_pound = price_per_pound
 
+    def calculate_cost(self) -> float:
+        """Calculate the cost of the dessert item, rounded to two decimal places"""
+        return round(self.candy_weight * self.price_per_pound, 2)
+
 
 class Cookie(DessertItem):
     """Cookie class, inherits from DessertItem
@@ -41,6 +55,10 @@ class Cookie(DessertItem):
         self.cookie_quantity = cookie_quantity
         self.price_per_dozen = price_per_dozen
 
+    def calculate_cost(self) -> float:
+        """Calculate the cost of the dessert item, rounded to two decimal places"""
+        return round(self.cookie_quantity * self.price_per_dozen / 12, 2)
+
 
 class IceCream(DessertItem):
     """IceCream class, inherits from DessertItem
@@ -54,6 +72,10 @@ class IceCream(DessertItem):
         super().__init__(name)
         self.scoop_count = scoop_count
         self.price_per_scoop = price_per_scoop
+
+    def calculate_cost(self) -> float:
+        """Calculate the cost of the dessert item, rounded to two decimal places"""
+        return round(self.scoop_count * self.price_per_scoop, 2)
 
 
 class Sundae(IceCream):
@@ -77,3 +99,7 @@ class Sundae(IceCream):
         super().__init__(name, scoop_count, price_per_scoop)
         self.topping_name = topping_name
         self.topping_price = topping_price
+
+    def calculate_cost(self) -> float:
+        """Calculate the cost of the dessert item, rounded to two decimal places"""
+        return round(super().calculate_cost() + self.topping_price, 2)
