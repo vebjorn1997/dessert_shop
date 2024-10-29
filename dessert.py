@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
-
 """Classes for all dessert items"""
+from abc import ABC, abstractmethod
 
 
 class DessertItem(ABC):
