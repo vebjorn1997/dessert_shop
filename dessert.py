@@ -1,4 +1,5 @@
 """Classes for all dessert items"""
+
 from abc import ABC, abstractmethod
 
 
@@ -21,7 +22,6 @@ class DessertItem(ABC):
         Calculate the cost of the dessert item
         """
         pass
-
 
     def calculate_tax(self) -> float:
         return round(self.calculate_cost() * self.tax_percent / 100, 2)
