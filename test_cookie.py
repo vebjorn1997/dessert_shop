@@ -1,5 +1,6 @@
 from dessert import Cookie
 
+
 def test_cookie():
     cookie = Cookie("Sjokoladekake", 12, 3.99)
     assert cookie.tax_percent == 7.25

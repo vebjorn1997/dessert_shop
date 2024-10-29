@@ -1,5 +1,6 @@
 from dessert import Sundae
 
+
 def test_sundae():
     sundae = Sundae("Sjokoladeiskrem", 3, 1.99, "Oboy", 0.75)
     assert sundae.tax_percent == 7.25

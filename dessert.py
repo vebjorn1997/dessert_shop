@@ -74,6 +74,7 @@ class IceCream(DessertItem):
     def calculate_cost(self) -> float:
         return round(self.scoop_count * self.price_per_scoop, 2)
 
+
 class Sundae(IceCream):
     """Sundae class, inherits from IceCream
     Arguments:

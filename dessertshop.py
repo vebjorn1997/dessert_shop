@@ -1,8 +1,10 @@
 from dessert import DessertItem, Candy, Cookie, IceCream, Sundae
 import receipt
 
+
 class Order:
     """Order class for the dessert shop, holds a list of DessertItems"""
+
     def __init__(self):
         self.order: list[DessertItem] = []
 
@@ -20,7 +22,7 @@ class Order:
 
     def order_cost(self) -> float:
         return round(sum(item.calculate_cost() for item in self.order), 2)
-    
+
     def order_tax(self) -> float:
         return round(sum(item.calculate_tax() for item in self.order), 2)
 
@@ -34,9 +36,7 @@ def main():
     order.add(Sundae("Vanilla", 3, 0.69, "Hot Fudge", 1.29))
     order.add(Cookie("Oatmeal Raisin", 2, 3.45))
 
-    data = [
-        ["Name", "Item Cost", "Tax"]
-    ]
+    data = [["Name", "Item Cost", "Tax"]]
 
     for item in order:
         data.append([item.name, item.calculate_cost(), item.calculate_tax()])

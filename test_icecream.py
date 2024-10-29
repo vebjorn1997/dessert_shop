@@ -1,5 +1,6 @@
 from dessert import IceCream
 
+
 def test_icecream():
     icecream = IceCream("Sjokoladeis", 3, 1.99)
     assert icecream.tax_percent == 7.25
