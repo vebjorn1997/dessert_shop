@@ -13,12 +13,16 @@ class DessertItem(ABC):
         self.name = name
         self.tax_percent = 7.25
 
-    @abstractmethod
-    def calculate_cost(self) -> float:
-        pass
-
     def __str__(self):
         return self.name
+
+    @abstractmethod
+    def calculate_cost(self) -> float:
+        """
+        Calculate the cost of the dessert item
+        """
+        pass
+
 
     def calculate_tax(self) -> float:
         return round(self.calculate_cost() * self.tax_percent / 100, 2)

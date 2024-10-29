@@ -21,9 +21,15 @@ class Order:
         self.order.append(item)
 
     def order_cost(self) -> float:
+        """
+        Calculate the cost of the order, rounded to two decimal places, all items in the order
+        """
         return round(sum(item.calculate_cost() for item in self.order), 2)
 
     def order_tax(self) -> float:
+        """
+        Calculate the tax of the order, rounded to two decimal places, all items in the order
+        """
         return round(sum(item.calculate_tax() for item in self.order), 2)
 
 
