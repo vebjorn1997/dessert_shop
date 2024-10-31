@@ -1,36 +1,32 @@
-from dessert import DessertItem, Candy, Cookie, IceCream, Sundae
+from dessert import Candy, Cookie, IceCream, Sundae, Order
 import receipt
 
+class DessertShop:
+    def user_prompt_candy(self) -> Candy:
+        name = validate_string("Enter the name of the candy: ")
+        weight = validate_float("Enter the weight of the candy: ")
+        price_per_pound = validate_float("Enter the price per pound of the candy: ")
+        return Candy(name, weight, price_per_pound)
 
-class Order:
-    """Order class for the dessert shop, holds a list of DessertItems"""
+    def user_prompt_cookie(self) -> Cookie:
+        name = validate_string("Enter the name of the cookie: ")
+        quantity = validate_float("Enter the quantity of the cookie: ")
+        price_per_dozen = validate_float("Enter the price per dozen of the cookie: ")
+        return Cookie(name, quantity, price_per_dozen)
 
-    def __init__(self):
-        self.order: list[DessertItem] = []
+    def user_prompt_icecream(self) -> IceCream:
+        name = validate_string("Enter the name of the ice cream: ")
+        scoop_count = validate_int("Enter the number of scoops of the ice cream: ")
+        price_per_scoop = validate_float("Enter the price per scoop of the ice cream: ")
+        return IceCream(name, scoop_count, price_per_scoop)
 
-    def __len__(self):
-        return len(self.order)
-
-    def __iter__(self):
-        return iter(self.order)
-
-    def __next__(self):
-        return next(self.order)
-
-    def add(self, item: DessertItem):
-        self.order.append(item)
-
-    def order_cost(self) -> float:
-        """
-        Calculate the cost of the order, rounded to two decimal places, all items in the order
-        """
-        return round(sum(item.calculate_cost() for item in self.order), 2)
-
-    def order_tax(self) -> float:
-        """
-        Calculate the tax of the order, rounded to two decimal places, all items in the order
-        """
-        return round(sum(item.calculate_tax() for item in self.order), 2)
+    def user_prompt_sundae(self) -> Sundae:
+        name = validate_string("Enter the name of the sundae: ")
+        scoop_count = validate_int("Enter the number of scoops of the sundae: ")
+        price_per_scoop = validate_float("Enter the price per scoop of the sundae: ")
+        topping_name = validate_string("Enter the name of the topping: ")
+        topping_price = validate_float("Enter the price of the topping: ")
+        return Sundae(name, scoop_count, price_per_scoop, topping_name, topping_price)
 
 def validate_float(string: float | int | str) -> float:
     while True:
@@ -53,32 +49,6 @@ def validate_string(string: str) -> str:
         except ValueError:
             print("Invalid input detected, please enter a string.")
 
-class DessertShop:
-    def user_prompt_candy(self):
-        name = validate_string("Enter the name of the candy: ")
-        weight = validate_float("Enter the weight of the candy: ")
-        price_per_pound = validate_float("Enter the price per pound of the candy: ")
-        return Candy(name, weight, price_per_pound)
-
-    def user_prompt_cookie(self):
-        name = validate_string("Enter the name of the cookie: ")
-        quantity = validate_float("Enter the quantity of the cookie: ")
-        price_per_dozen = validate_float("Enter the price per dozen of the cookie: ")
-        return Cookie(name, quantity, price_per_dozen)
-
-    def user_prompt_icecream(self):
-        name = validate_string("Enter the name of the ice cream: ")
-        scoop_count = validate_int("Enter the number of scoops of the ice cream: ")
-        price_per_scoop = validate_float("Enter the price per scoop of the ice cream: ")
-        return IceCream(name, scoop_count, price_per_scoop)
-
-    def user_prompt_sundae(self):
-        name = validate_string("Enter the name of the sundae: ")
-        scoop_count = validate_int("Enter the number of scoops of the sundae: ")
-        price_per_scoop = validate_float("Enter the price per scoop of the sundae: ")
-        topping_name = validate_string("Enter the name of the topping: ")
-        topping_price = validate_float("Enter the price of the topping: ")
-        return Sundae(name, scoop_count, price_per_scoop, topping_name, topping_price)
 
 def main():
     shop = DessertShop()
