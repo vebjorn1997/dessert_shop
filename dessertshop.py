@@ -1,36 +1,6 @@
-from dessert import DessertItem, Candy, Cookie, IceCream, Sundae
+from dessert import Candy, Cookie, IceCream, Sundae, Order
 import receipt
 
-
-class Order:
-    """Order class for the dessert shop, holds a list of DessertItems"""
-
-    def __init__(self):
-        self.order: list[DessertItem] = []
-
-    def __len__(self):
-        return len(self.order)
-
-    def __iter__(self):
-        return iter(self.order)
-
-    def __next__(self):
-        return next(self.order)
-
-    def add(self, item: DessertItem):
-        self.order.append(item)
-
-    def order_cost(self) -> float:
-        """
-        Calculate the cost of the order, rounded to two decimal places, all items in the order
-        """
-        return round(sum(item.calculate_cost() for item in self.order), 2)
-
-    def order_tax(self) -> float:
-        """
-        Calculate the tax of the order, rounded to two decimal places, all items in the order
-        """
-        return round(sum(item.calculate_tax() for item in self.order), 2)
 
 def validate_float(string: float | int | str) -> float:
     while True:
