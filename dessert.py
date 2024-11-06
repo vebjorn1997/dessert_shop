@@ -3,7 +3,6 @@
 from abc import ABC, abstractmethod
 
 
-
 class DessertItem(ABC):
     """Base class for all dessert items
     Arguments:
@@ -38,6 +37,12 @@ class Candy(DessertItem):
         self.candy_weight = candy_weight
         self.price_per_pound = price_per_pound
 
+    def __str__(self):
+        return f"{self.name}, {self.candy_weight:.2f} lbs, ${self.price_per_pound:.2f}/lb, ${self.calculate_cost():.2f}, ${self.calculate_tax():.2f}"
+
+    def __repr__(self):
+        return f"Candy('{self.name}', '{self.candy_weight}', '{self.price_per_pound}')"
+
     def calculate_cost(self) -> float:
         """Calculate the cost of the dessert item, rounded to two decimal places"""
         return round(self.candy_weight * self.price_per_pound, 2)
@@ -56,6 +61,14 @@ class Cookie(DessertItem):
         self.cookie_quantity = cookie_quantity
         self.price_per_dozen = price_per_dozen
 
+    def __str__(self):
+        return f"{self.name}, {self.cookie_quantity} unit(s), ${self.price_per_dozen:.2f}/dozen, ${self.calculate_cost():.2f}, ${self.calculate_tax():.2f}"
+
+    def __repr__(self):
+        return (
+            f"Cookie('{self.name}', '{self.cookie_quantity}', '{self.price_per_dozen}')"
+        )
+
     def calculate_cost(self) -> float:
         """Calculate the cost of the dessert item, rounded to two decimal places"""
         return round(self.cookie_quantity * self.price_per_dozen / 12, 2)
@@ -73,6 +86,14 @@ class IceCream(DessertItem):
         super().__init__(name)
         self.scoop_count = scoop_count
         self.price_per_scoop = price_per_scoop
+
+    def __str__(self):
+        return f"{self.name}, {self.scoop_count} scoop(s), ${self.price_per_scoop:.2f}/scoop, ${self.calculate_cost():.2f}, ${self.calculate_tax():.2f}"
+
+    def __repr__(self):
+        return (
+            f"IceCream('{self.name}', '{self.scoop_count}', '{self.price_per_scoop}')"
+        )
 
     def calculate_cost(self) -> float:
         """Calculate the cost of the dessert item, rounded to two decimal places"""
@@ -105,6 +126,13 @@ class Sundae(IceCream):
         """Calculate the cost of the dessert item, rounded to two decimal places"""
         return round(super().calculate_cost() + self.topping_price, 2)
 
+    def __str__(self):
+        return f"Sundae: {self.name}, {self.scoop_count} scoop(s), ${self.price_per_scoop:.2f}/scoop, Topping: {self.topping_name}, ${self.topping_price:.2f}, ${self.calculate_cost():.2f}, ${self.calculate_tax():.2f}"
+
+    def __repr__(self):
+        return f"Sundae('{self.name}', '{self.scoop_count}', '{self.price_per_scoop}', '{self.topping_name}', '{self.topping_price}')"
+
+
 class Order:
     """Order class for the dessert shop, holds a list of DessertItems"""
 
@@ -119,6 +147,12 @@ class Order:
 
     def __next__(self):
         return next(self.order)
+
+    def __str__(self):
+        return "\n".join(str(item) for item in self.order)
+
+    def __repr__(self):
+        return f"Order({', '.join(repr(item) for item in self.order)})"
 
     def add(self, item: DessertItem):
         self.order.append(item)

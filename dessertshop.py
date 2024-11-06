@@ -1,6 +1,7 @@
 from dessert import Candy, Cookie, IceCream, Sundae, Order
 import receipt
 
+
 class DessertShop:
     def user_prompt_candy(self) -> Candy:
         name = validate_string("Enter the name of the candy: ")
@@ -28,6 +29,7 @@ class DessertShop:
         topping_price = validate_float("Enter the price of the topping: ")
         return Sundae(name, scoop_count, price_per_scoop, topping_name, topping_price)
 
+
 def validate_float(string: float | int | str) -> float:
     while True:
         try:
@@ -35,12 +37,14 @@ def validate_float(string: float | int | str) -> float:
         except ValueError:
             print("Invalid input detected, please enter a float.")
 
+
 def validate_int(string: int | str) -> int:
     while True:
         try:
             return int(input(string))
         except ValueError:
             print("Invalid input detected, please enter an integer.")
+
 
 def validate_string(string: str) -> str:
     while True:
@@ -54,37 +58,42 @@ def main():
     shop = DessertShop()
     order = Order()
     done: bool = False
-    prompt = '\n'.join([ '\n',
-            '1: Candy',
-            '2: Cookie',            
-            '3: Ice Cream',
-            '4: Sunday',
-            '\nWhat would you like to add to the order? (1-4, Enter for done): '
-            ])
+    prompt = "\n".join(
+        [
+            "\n",
+            "1: Candy",
+            "2: Cookie",
+            "3: Ice Cream",
+            "4: Sunday",
+            "\nWhat would you like to add to the order? (1-4, Enter for done): ",
+        ]
+    )
 
     while not done:
         choice = input(prompt)
         match choice:
-            case '':
+            case "":
                 done = True
-            case '1':
+            case "1":
                 item = shop.user_prompt_candy()
                 order.add(item)
-                print(f'{item.name} has been added to your order.')
-            case '2':
+                print(item)
+            case "2":
                 item = shop.user_prompt_cookie()
                 order.add(item)
-                print(f'{item.name} has been added to your order.')
-            case '3':
+                print(item)
+            case "3":
                 item = shop.user_prompt_icecream()
                 order.add(item)
-                print(f'{item.name} has been added to your order.')
-            case '4':
+                print(item)
+            case "4":
                 item = shop.user_prompt_sundae()
                 order.add(item)
-                print(f'{item.name} has been added to your order.')
+                print(item)
             case _:
-                print('Invalid response:  Please enter a choice from the menu (1-4) or Enter')
+                print(
+                    "Invalid response:  Please enter a choice from the menu (1-4) or Enter"
+                )
 
     data = [["Name", "Item Cost", "Tax"]]
 

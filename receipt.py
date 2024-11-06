@@ -4,6 +4,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
 
+
 def make_receipt(
     data: list[list[str, int, float]], out_file_name: str
 ):  # shouldn't it be list[list[str,float,float]]? Second argument returns a float usually?
