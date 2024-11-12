@@ -1,4 +1,4 @@
-from dessert import Candy, Cookie, IceCream, Sundae, Order
+from dessert import Candy, Cookie, IceCream, Sundae, Order, PayType
 import receipt
 
 
@@ -28,6 +28,9 @@ class DessertShop:
         topping_name = validate_string("Enter the name of the topping: ")
         topping_price = validate_float("Enter the price of the topping: ")
         return Sundae(name, scoop_count, price_per_scoop, topping_name, topping_price)
+
+    def user_prompt_pay_type(self, pay_type: str) -> PayType:
+        return PayType(pay_type)
 
 
 def validate_float(string: float | int | str) -> float:
@@ -68,11 +71,28 @@ def main():
             "\nWhat would you like to add to the order? (1-4, Enter for done): ",
         ]
     )
+    pay_type_prompt = "\n".join(
+        [
+            "\n",
+            "1: Cash",
+            "2: Card",
+            "3: Phone",
+            "\nWhat type of payment would you like to use? (1-3): ",
+        ]
+    )
 
     while not done:
         choice = input(prompt)
         match choice:
             case "":
+                pay_type_choice = input(pay_type_prompt)
+                match pay_type_choice:
+                    case "1":
+                        order.set_pay_type(shop.user_prompt_pay_type(PayType.CASH))
+                    case "2":
+                        order.set_pay_type(shop.user_prompt_pay_type(PayType.CARD))
+                    case "3":
+                        order.set_pay_type(shop.user_prompt_pay_type(PayType.PHONE))
                 done = True
             case "1":
                 item = shop.user_prompt_candy()
@@ -97,13 +117,23 @@ def main():
 
     data = [["Name", "Item Cost", "Tax"]]
 
-    for item in order:
-        data.append([item.name, item.calculate_cost(), item.calculate_tax()])
-
-    data.append([""])
-    data.append(["Subtotal", order.order_cost(), order.order_tax()])
-    data.append(["Order Total", "", order.order_cost() + order.order_tax()])
-    data.append(["Total items in order", "", len(order)])
+    order_line = order.__str__().split("\n")
+    for item in order_line:
+        if len(order_line) == order_line.index(item) + 1:
+            data.append([""])
+            data.append(["Total items in order", "", len(order)])
+            data.append(["Subtotal", f"${order.order_cost()}", f"${order.order_tax()}"])
+            data.append(
+                [
+                    "Order Total",
+                    "",
+                    f"${round(order.order_cost() + order.order_tax(), 2)}",
+                ]
+            )
+            data.append(["Paid with ", "", order.get_pay_type()])
+        else:
+            splitted = item.split(",")
+            data.append([splitted[0], splitted[-2], splitted[-1]])
 
     receipt.make_receipt(data, "receipt.pdf")
 

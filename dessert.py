@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from packaging import Packaging
+from payable import PayType
 
 
 class DessertItem(ABC, Packaging):
@@ -133,7 +134,7 @@ class Sundae(IceCream):
         return round(super().calculate_cost() + self.topping_price, 2)
 
     def __str__(self):
-        return f"Sundae: {self.name}, {self.scoop_count} scoop(s), ${self.price_per_scoop:.2f}/scoop, Packaging: {self.packaging}, Topping: {self.topping_name}, ${self.topping_price:.2f}, ${self.calculate_cost():.2f}, ${self.calculate_tax():.2f}"
+        return f"{self.name}, {self.scoop_count} scoop(s), ${self.price_per_scoop:.2f}/scoop, Packaging: {self.packaging}, {self.topping_name}, ${self.topping_price:.2f}, ${self.calculate_cost():.2f}, ${self.calculate_tax():.2f}"
 
     def __repr__(self):
         return f"Sundae('{self.name}', '{self.scoop_count}', '{self.price_per_scoop}', '{self.topping_name}', '{self.topping_price}')"
@@ -144,6 +145,7 @@ class Order:
 
     def __init__(self):
         self.order: list[DessertItem] = []
+        self.pay_type: PayType = "CASH"
 
     def __len__(self):
         return len(self.order)
@@ -155,7 +157,10 @@ class Order:
         return next(self.order)
 
     def __str__(self):
-        return "\n".join(str(item) for item in self.order)
+        return (
+            "\n".join(str(item) for item in self.order)
+            + f"\n${self.order_cost()}, ${self.order_tax()}, {self.get_pay_type()}"
+        )
 
     def __repr__(self):
         return f"Order({', '.join(repr(item) for item in self.order)})"
@@ -174,3 +179,14 @@ class Order:
         Calculate the tax of the order, rounded to two decimal places, all items in the order
         """
         return round(sum(item.calculate_tax() for item in self.order), 2)
+
+    def get_pay_type(self) -> PayType:
+        if self.pay_type not in PayType:
+            raise ValueError("Invalid get pay type")
+        return self.pay_type
+
+    def set_pay_type(self, pay_type: PayType) -> None:
+        print(pay_type)
+        if pay_type not in PayType:
+            raise ValueError("Invalid set pay type")
+        self.pay_type = pay_type.value
