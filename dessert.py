@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from packaging import Packaging
-from payable import PayType
+from payable import PayType, Payable
 
 
 class DessertItem(ABC, Packaging):
@@ -140,7 +140,7 @@ class Sundae(IceCream):
         return f"Sundae('{self.name}', '{self.scoop_count}', '{self.price_per_scoop}', '{self.topping_name}', '{self.topping_price}')"
 
 
-class Order:
+class Order(Payable):
     """Order class for the dessert shop, holds a list of DessertItems"""
 
     def __init__(self):
@@ -185,8 +185,7 @@ class Order:
             raise ValueError("Invalid get pay type")
         return self.pay_type
 
-    def set_pay_type(self, pay_type: PayType) -> None:
-        print(pay_type)
-        if pay_type not in PayType:
+    def set_pay_type(self, payment_method: PayType) -> None:
+        if payment_method not in PayType:
             raise ValueError("Invalid set pay type")
-        self.pay_type = pay_type.value
+        self.pay_type = payment_method.value
