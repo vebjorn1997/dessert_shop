@@ -19,6 +19,24 @@ class DessertItem(ABC, Packaging):
     def __str__(self):
         return self.name
 
+    def __eq__(self, other: "DessertItem") -> bool:
+        return self.calculate_cost() == other.calculate_cost()
+
+    def __ne__(self, other: "DessertItem") -> bool:
+        return self.calculate_cost() != other.calculate_cost()
+
+    def __lt__(self, other: "DessertItem") -> bool:
+        return self.calculate_cost() < other.calculate_cost()
+
+    def __gt__(self, other: "DessertItem") -> bool:
+        return self.calculate_cost() > other.calculate_cost()
+
+    def __le__(self, other: "DessertItem") -> bool:
+        return self.calculate_cost() <= other.calculate_cost()
+
+    def __ge__(self, other: "DessertItem") -> bool:
+        return self.calculate_cost() >= other.calculate_cost()
+
     @abstractmethod
     def calculate_cost(self) -> float:
         pass
@@ -144,41 +162,41 @@ class Order(Payable):
     """Order class for the dessert shop, holds a list of DessertItems"""
 
     def __init__(self):
-        self.order: list[DessertItem] = []
+        self.orders: list[DessertItem] = []
         self.pay_type: PayType = "CASH"
 
     def __len__(self):
-        return len(self.order)
+        return len(self.orders)
 
     def __iter__(self):
-        return iter(self.order)
+        return iter(self.orders)
 
     def __next__(self):
-        return next(self.order)
+        return next(self.orders)
 
     def __str__(self):
         return (
-            "\n".join(str(item) for item in self.order)
+            "\n".join(str(item) for item in self.orders)
             + f"\n${self.order_cost()}, ${self.order_tax()}, {self.get_pay_type()}"
         )
 
     def __repr__(self):
-        return f"Order({', '.join(repr(item) for item in self.order)})"
+        return f"Order({', '.join(repr(item) for item in self.orders)})"
 
     def add(self, item: DessertItem):
-        self.order.append(item)
+        self.orders.append(item)
 
     def order_cost(self) -> float:
         """
         Calculate the cost of the order, rounded to two decimal places, all items in the order
         """
-        return round(sum(item.calculate_cost() for item in self.order), 2)
+        return round(sum(item.calculate_cost() for item in self.orders), 2)
 
     def order_tax(self) -> float:
         """
         Calculate the tax of the order, rounded to two decimal places, all items in the order
         """
-        return round(sum(item.calculate_tax() for item in self.order), 2)
+        return round(sum(item.calculate_tax() for item in self.orders), 2)
 
     def get_pay_type(self) -> PayType:
         if self.pay_type not in PayType:
@@ -189,3 +207,6 @@ class Order(Payable):
         if payment_method not in PayType:
             raise ValueError("Invalid set pay type")
         self.pay_type = payment_method.value
+
+    def sort(self) -> None:
+        self.orders.sort()

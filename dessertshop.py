@@ -117,6 +117,8 @@ def main():
 
     data = [["Name", "Item Cost", "Tax"]]
 
+    order.sort()
+
     order_line = order.__str__().split("\n")
     for item in order_line:
         if len(order_line) == order_line.index(item) + 1:

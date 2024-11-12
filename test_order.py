@@ -1,5 +1,5 @@
 import pytest
-from dessert import Order, PayType
+from dessert import Order, PayType, Candy
 
 
 def test_order():
@@ -19,3 +19,13 @@ def test_order():
     order.pay_type = "1"
     with pytest.raises(ValueError):
         order.get_pay_type()
+
+
+def test_sort():
+    order = Order()
+    order.add(Candy("Candy Corn", 1.5, 0.25))
+    order.add(Candy("Fake Candy", 1.1, 0.1))
+    order.add(Candy("Alt Candy", 5, 1.0))
+    order.sort()
+    assert order.orders[0].name == "Fake Candy"
+    assert order.orders[-1].name == "Alt Candy"
