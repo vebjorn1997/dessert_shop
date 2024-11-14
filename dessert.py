@@ -19,23 +19,35 @@ class DessertItem(ABC, Packaging):
     def __str__(self):
         return self.name
 
-    def __eq__(self, other: "DessertItem") -> bool:
-        return self.calculate_cost() == other.calculate_cost()
+    def __eq__(self, other) -> bool:
+        if isinstance(other, DessertItem):
+            return self.calculate_cost() == other.calculate_cost()
+        return NotImplemented
 
-    def __ne__(self, other: "DessertItem") -> bool:
-        return self.calculate_cost() != other.calculate_cost()
+    def __ne__(self, other) -> bool:
+        if isinstance(other, DessertItem):
+            return self.calculate_cost() != other.calculate_cost()
+        return NotImplemented
 
-    def __lt__(self, other: "DessertItem") -> bool:
-        return self.calculate_cost() < other.calculate_cost()
+    def __lt__(self, other) -> bool:
+        if isinstance(other, DessertItem):
+            return self.calculate_cost() < other.calculate_cost()
+        return NotImplemented
 
-    def __gt__(self, other: "DessertItem") -> bool:
-        return self.calculate_cost() > other.calculate_cost()
+    def __gt__(self, other) -> bool:
+        if isinstance(other, DessertItem):
+            return self.calculate_cost() > other.calculate_cost()
+        return NotImplemented
 
-    def __le__(self, other: "DessertItem") -> bool:
-        return self.calculate_cost() <= other.calculate_cost()
+    def __le__(self, other) -> bool:
+        if isinstance(other, DessertItem):
+            return self.calculate_cost() <= other.calculate_cost()
+        return NotImplemented
 
-    def __ge__(self, other: "DessertItem") -> bool:
-        return self.calculate_cost() >= other.calculate_cost()
+    def __ge__(self, other) -> bool:
+        if isinstance(other, DessertItem):
+            return self.calculate_cost() >= other.calculate_cost()
+        return NotImplemented
 
     @abstractmethod
     def calculate_cost(self) -> float:
