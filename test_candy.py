@@ -11,12 +11,13 @@ def test_candy():
     assert candy.calculate_cost() == 9.88
     assert candy.calculate_tax() == 0.72
 
+
 def test_candy_combine():
     candy1 = Candy("Sjokolade", 5.20, 1.90)
     candy2 = Candy("Sjokolade", 5.20, 1.90)
     candy3 = Cookie("Falsk Sjokoladekake", 12, 3.99)
     assert candy1.combine(candy2) == Candy("Sjokolade", 10.40, 1.90)
-    assert candy1.can_combine(candy2) == True
-    assert candy1.can_combine(candy3) == False
+    assert candy1.can_combine(candy2)
+    assert not candy1.can_combine(candy3)
     with pytest.raises(TypeError):
         candy1.combine(candy3)

@@ -81,14 +81,17 @@ class Candy(DessertItem):
     def calculate_cost(self) -> float:
         """Calculate the cost of the dessert item, rounded to two decimal places"""
         return round(self.candy_weight * self.price_per_pound, 2)
-    
+
     def can_combine(self, other: Combinable) -> bool:
         return isinstance(other, Candy) and self.name == other.name
 
     def combine(self, other: "Candy") -> "Candy":
         if not self.can_combine(other):
             raise TypeError("Cannot combine different items")
-        return Candy(self.name, self.candy_weight + other.candy_weight, self.price_per_pound)
+        return Candy(
+            self.name, self.candy_weight + other.candy_weight, self.price_per_pound
+        )
+
 
 class Cookie(DessertItem):
     """Cookie class, inherits from DessertItem
@@ -115,14 +118,22 @@ class Cookie(DessertItem):
     def calculate_cost(self) -> float:
         """Calculate the cost of the dessert item, rounded to two decimal places"""
         return round(self.cookie_quantity * self.price_per_dozen / 12, 2)
-    
+
     def can_combine(self, other: Combinable) -> bool:
-        return isinstance(other, Cookie) and self.name == other.name and self.price_per_dozen == other.price_per_dozen
+        return (
+            isinstance(other, Cookie)
+            and self.name == other.name
+            and self.price_per_dozen == other.price_per_dozen
+        )
 
     def combine(self, other: "Cookie") -> "Cookie":
         if not self.can_combine(other):
             raise TypeError("Cannot combine different items")
-        return Cookie(self.name, self.cookie_quantity + other.cookie_quantity, self.price_per_dozen)
+        return Cookie(
+            self.name,
+            self.cookie_quantity + other.cookie_quantity,
+            self.price_per_dozen,
+        )
 
 
 class IceCream(DessertItem):
@@ -214,10 +225,16 @@ class Order(Payable):
     def add(self, item: DessertItem):
         if not isinstance(item, Combinable):
             self.orders.append(item)
-        elif not [i for i in self.orders if isinstance(i, Combinable) and i.can_combine(item)]:
+        elif not [
+            i for i in self.orders if isinstance(i, Combinable) and i.can_combine(item)
+        ]:
             self.orders.append(item)
         elif isinstance(item, Combinable):
-            combinable_items = [i for i in self.orders if isinstance(i, type(item)) and i.can_combine(item)]
+            combinable_items = [
+                i
+                for i in self.orders
+                if isinstance(i, type(item)) and i.can_combine(item)
+            ]
             if combinable_items:
                 matching_item = combinable_items[0]
                 self.orders.append(matching_item.combine(item))
