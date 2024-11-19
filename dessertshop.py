@@ -57,20 +57,7 @@ def validate_string(string: str) -> str:
             print("Invalid input detected, please enter a string.")
 
 
-def main():
-    shop = DessertShop()
-    order = Order()
-    done: bool = False
-    prompt = "\n".join(
-        [
-            "\n",
-            "1: Candy",
-            "2: Cookie",
-            "3: Ice Cream",
-            "4: Sunday",
-            "\nWhat would you like to add to the order? (1-4, Enter for done): ",
-        ]
-    )
+def pay_type_prompt(order: Order, shop: DessertShop):
     pay_type_prompt = "\n".join(
         [
             "\n",
@@ -81,19 +68,43 @@ def main():
         ]
     )
 
+    pay_type_done: bool = False
+    while not pay_type_done:
+        pay_type_choice = input(pay_type_prompt)
+        match pay_type_choice:
+            case "1":
+                order.set_pay_type(shop.user_prompt_pay_type(PayType.CASH))
+                pay_type_done = True
+            case "2":
+                order.set_pay_type(shop.user_prompt_pay_type(PayType.CARD))
+                pay_type_done = True
+            case "3":
+                order.set_pay_type(shop.user_prompt_pay_type(PayType.PHONE))
+                pay_type_done = True
+            case _:
+                print(
+                    "Invalid response:  Please enter a choice from the menu (1-3)"
+                )
+
+def item_prompt(order: Order, shop: DessertShop):
+    prompt = "\n".join(
+        [
+            "\n",
+            "1: Candy",
+            "2: Cookie",
+            "3: Ice Cream",
+            "4: Sunday",
+            "\nWhat would you like to add to the order? (1-4, Enter for done): ",
+        ]
+    )
+    done: bool = False
     while not done:
         choice = input(prompt)
         match choice:
             case "":
-                pay_type_choice = input(pay_type_prompt)
-                match pay_type_choice:
-                    case "1":
-                        order.set_pay_type(shop.user_prompt_pay_type(PayType.CASH))
-                    case "2":
-                        order.set_pay_type(shop.user_prompt_pay_type(PayType.CARD))
-                    case "3":
-                        order.set_pay_type(shop.user_prompt_pay_type(PayType.PHONE))
-                done = True
+                if len(order) > 0:
+                    pay_type_prompt(order, shop)
+                    done = True
             case "1":
                 item = shop.user_prompt_candy()
                 order.add(item)
@@ -115,8 +126,13 @@ def main():
                     "Invalid response:  Please enter a choice from the menu (1-4) or Enter"
                 )
 
-    data = [["Name", "Item Cost", "Tax"]]
+def main():
+    shop = DessertShop()
+    order = Order()
 
+    item_prompt(order, shop)
+
+    data = [["Name", "Item Cost", "Tax"]]
     order.sort()
 
     order_line = order.__str__().split("\n")
