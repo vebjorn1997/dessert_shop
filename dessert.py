@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from packaging import Packaging
 from payable import PayType, Payable
+from combinable import Combinable
 
 
 class DessertItem(ABC, Packaging):
@@ -80,7 +81,14 @@ class Candy(DessertItem):
     def calculate_cost(self) -> float:
         """Calculate the cost of the dessert item, rounded to two decimal places"""
         return round(self.candy_weight * self.price_per_pound, 2)
+    
+    def can_combine(self, other: Combinable) -> bool:
+        return isinstance(other, Candy) and self.name == other.name
 
+    def combine(self, other: "Candy") -> "Candy":
+        if not self.can_combine(other):
+            raise TypeError("Cannot combine different items")
+        return Candy(self.name, self.candy_weight + other.candy_weight, self.price_per_pound)
 
 class Cookie(DessertItem):
     """Cookie class, inherits from DessertItem
@@ -107,6 +115,14 @@ class Cookie(DessertItem):
     def calculate_cost(self) -> float:
         """Calculate the cost of the dessert item, rounded to two decimal places"""
         return round(self.cookie_quantity * self.price_per_dozen / 12, 2)
+    
+    def can_combine(self, other: Combinable) -> bool:
+        return isinstance(other, Cookie) and self.name == other.name and self.price_per_dozen == other.price_per_dozen
+
+    def combine(self, other: "Cookie") -> "Cookie":
+        if not self.can_combine(other):
+            raise TypeError("Cannot combine different items")
+        return Cookie(self.name, self.cookie_quantity + other.cookie_quantity, self.price_per_dozen)
 
 
 class IceCream(DessertItem):
@@ -196,7 +212,19 @@ class Order(Payable):
         return f"Order({', '.join(repr(item) for item in self.orders)})"
 
     def add(self, item: DessertItem):
-        self.orders.append(item)
+        if not isinstance(item, Combinable):
+            self.orders.append(item)
+        elif not [i for i in self.orders if isinstance(i, Combinable) and i.can_combine(item)]:
+            self.orders.append(item)
+        elif isinstance(item, Combinable):
+            combinable_items = [i for i in self.orders if isinstance(i, type(item)) and i.can_combine(item)]
+            if combinable_items:
+                matching_item = combinable_items[0]
+                self.orders.append(matching_item.combine(item))
+                self.orders.remove(matching_item)
+        else:
+            print("Something went wrong if you are here")
+            raise ValueError("Invalid item")
 
     def order_cost(self) -> float:
         """
