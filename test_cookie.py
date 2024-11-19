@@ -11,12 +11,13 @@ def test_cookie():
     assert cookie.calculate_cost() == 3.99
     assert cookie.calculate_tax() == 0.29
 
+
 def test_cookie_combine():
     cookie1 = Cookie("Sjokoladekake", 12, 3.99)
     cookie2 = Cookie("Sjokoladekake", 12, 3.99)
     cookie3 = Candy("Falsk Sjokolade", 5.20, 1.90)
     assert cookie1.combine(cookie2) == Cookie("Sjokoladekake", 24, 3.99)
-    assert cookie1.can_combine(cookie2) == True
-    assert cookie1.can_combine(cookie3) == False
+    assert cookie1.can_combine(cookie2)
+    assert not cookie1.can_combine(cookie3)
     with pytest.raises(TypeError):
         cookie1.combine(cookie3)

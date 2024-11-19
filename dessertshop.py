@@ -1,5 +1,17 @@
 from dessert import Candy, Cookie, IceCream, Sundae, Order, PayType
 import receipt
+import uuid
+
+
+class Customer:
+    def __init__(self, customer_name: str):
+        self.customer_name = customer_name
+        self.customer_id = uuid.uuid4()
+        self.order_history: list[Order] = []
+
+    def add2history(self, order: Order) -> "Customer":
+        self.order_history.append(order)
+        return self
 
 
 class DessertShop:
@@ -82,9 +94,8 @@ def pay_type_prompt(order: Order, shop: DessertShop):
                 order.set_pay_type(shop.user_prompt_pay_type(PayType.PHONE))
                 pay_type_done = True
             case _:
-                print(
-                    "Invalid response:  Please enter a choice from the menu (1-3)"
-                )
+                print("Invalid response:  Please enter a choice from the menu (1-3)")
+
 
 def item_prompt(order: Order, shop: DessertShop):
     prompt = "\n".join(
@@ -102,9 +113,8 @@ def item_prompt(order: Order, shop: DessertShop):
         choice = input(prompt)
         match choice:
             case "":
-                if len(order) > 0:
-                    pay_type_prompt(order, shop)
-                    done = True
+                pay_type_prompt(order, shop)
+                done = True
             case "1":
                 item = shop.user_prompt_candy()
                 order.add(item)
@@ -126,7 +136,8 @@ def item_prompt(order: Order, shop: DessertShop):
                     "Invalid response:  Please enter a choice from the menu (1-4) or Enter"
                 )
 
-def main():
+
+def create_an_order():
     shop = DessertShop()
     order = Order()
 
@@ -154,6 +165,25 @@ def main():
             data.append([splitted[0], splitted[-2], splitted[-1]])
 
     receipt.make_receipt(data, "receipt.pdf")
+
+
+def main():
+    orders_finished: bool = False
+    prompt = "\n".join(
+        [
+            "\n",
+            "Do you want to start a new order? (y/n): ",
+        ]
+    )
+
+    create_an_order()
+    while not orders_finished:
+        choice = input(prompt)
+        match choice:
+            case "y":
+                create_an_order()
+            case _:
+                orders_finished = True
 
 
 if __name__ == "__main__":
