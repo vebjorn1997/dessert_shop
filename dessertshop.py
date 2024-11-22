@@ -2,7 +2,6 @@ from dessert import Candy, Cookie, IceCream, Sundae, Order, PayType
 import receipt
 import uuid
 
-
 class Customer:
     def __init__(self, customer_name: str):
         self.customer_name = customer_name
