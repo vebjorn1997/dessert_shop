@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from packaging import Packaging
 from payable import PayType, Payable
-from combinable import Combinable
+from combine import Combinable
 
 
 class DessertItem(ABC, Packaging):
