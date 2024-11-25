@@ -1,5 +1,6 @@
 import os
 
+
 def validate_float(string: float | int | str) -> float:
     while True:
         try:
@@ -22,6 +23,7 @@ def validate_string(string: str) -> str:
             return str(input(string))
         except ValueError:
             print("Invalid input detected, please enter a string.")
+
 
 def create_receipt_folder():
     if not os.path.exists("receipts"):

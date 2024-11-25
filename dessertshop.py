@@ -3,6 +3,7 @@ from utils import validate_float, validate_int, validate_string, create_receipt_
 import receipt
 import uuid
 
+
 class Customer:
     def __init__(self, customer_name: str):
         self.customer_name = customer_name
@@ -84,6 +85,7 @@ def register_customer(order: Order, shop: DessertShop):
         shop.customer_db[customer_name] = Customer(customer_name)
         shop.customer_db[customer_name].add2history(order)
 
+
 def item_prompt(shop: DessertShop):
     order = Order()
     prompt = "\n".join(
@@ -129,6 +131,7 @@ def item_prompt(shop: DessertShop):
                 )
     order.sort()
 
+
 def print_order_history(customer: Customer):
     data = [["Name", "Item Cost", "Tax"]]
 
@@ -146,7 +149,9 @@ def print_order_history(customer: Customer):
             if len(order_line) == order_line.index(item) + 1:
                 data.append([""])
                 data.append(["Total items in order", "", len(order)])
-                data.append(["Subtotal", f"${order.order_cost()}", f"${order.order_tax()}"])
+                data.append(
+                    ["Subtotal", f"${order.order_cost()}", f"${order.order_tax()}"]
+                )
                 data.append(
                     [
                         "Order Total",
@@ -185,6 +190,7 @@ def main():
     create_receipt_folder()
     for customer in shop.customer_db.values():
         print_order_history(customer)
+
 
 if __name__ == "__main__":
     main()
