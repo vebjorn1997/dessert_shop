@@ -1,6 +1,8 @@
 from dessert import Candy, Cookie, IceCream, Sundae, Order, PayType
+from utils import validate_float, validate_int, validate_string, create_receipt_folder
 import receipt
 import uuid
+
 
 class Customer:
     def __init__(self, customer_name: str):
@@ -14,6 +16,9 @@ class Customer:
 
 
 class DessertShop:
+    def __init__(self):
+        self.customer_db: dict[str, Customer] = {}
+
     def user_prompt_candy(self) -> Candy:
         name = validate_string("Enter the name of the candy: ")
         weight = validate_float("Enter the weight of the candy: ")
@@ -44,30 +49,6 @@ class DessertShop:
         return PayType(pay_type)
 
 
-def validate_float(string: float | int | str) -> float:
-    while True:
-        try:
-            return float(input(string))
-        except ValueError:
-            print("Invalid input detected, please enter a float.")
-
-
-def validate_int(string: int | str) -> int:
-    while True:
-        try:
-            return int(input(string))
-        except ValueError:
-            print("Invalid input detected, please enter an integer.")
-
-
-def validate_string(string: str) -> str:
-    while True:
-        try:
-            return str(input(string))
-        except ValueError:
-            print("Invalid input detected, please enter a string.")
-
-
 def pay_type_prompt(order: Order, shop: DessertShop):
     pay_type_prompt = "\n".join(
         [
@@ -96,7 +77,17 @@ def pay_type_prompt(order: Order, shop: DessertShop):
                 print("Invalid response:  Please enter a choice from the menu (1-3)")
 
 
-def item_prompt(order: Order, shop: DessertShop):
+def register_customer(order: Order, shop: DessertShop):
+    customer_name = validate_string("Enter your name: ")
+    if customer_name in shop.customer_db:
+        shop.customer_db[customer_name].add2history(order)
+    else:
+        shop.customer_db[customer_name] = Customer(customer_name)
+        shop.customer_db[customer_name].add2history(order)
+
+
+def item_prompt(shop: DessertShop):
+    order = Order()
     prompt = "\n".join(
         [
             "\n",
@@ -112,8 +103,12 @@ def item_prompt(order: Order, shop: DessertShop):
         choice = input(prompt)
         match choice:
             case "":
-                pay_type_prompt(order, shop)
-                done = True
+                if len(order) > 0:
+                    register_customer(order, shop)
+                    pay_type_prompt(order, shop)
+                    done = True
+                else:
+                    print("No items in order")
             case "1":
                 item = shop.user_prompt_candy()
                 order.add(item)
@@ -134,39 +129,47 @@ def item_prompt(order: Order, shop: DessertShop):
                 print(
                     "Invalid response:  Please enter a choice from the menu (1-4) or Enter"
                 )
-
-
-def create_an_order():
-    shop = DessertShop()
-    order = Order()
-
-    item_prompt(order, shop)
-
-    data = [["Name", "Item Cost", "Tax"]]
     order.sort()
 
-    order_line = order.__str__().split("\n")
-    for item in order_line:
-        if len(order_line) == order_line.index(item) + 1:
-            data.append([""])
-            data.append(["Total items in order", "", len(order)])
-            data.append(["Subtotal", f"${order.order_cost()}", f"${order.order_tax()}"])
-            data.append(
-                [
-                    "Order Total",
-                    "",
-                    f"${round(order.order_cost() + order.order_tax(), 2)}",
-                ]
-            )
-            data.append(["Paid with ", "", order.get_pay_type()])
-        else:
-            splitted = item.split(",")
-            data.append([splitted[0], splitted[-2], splitted[-1]])
 
-    receipt.make_receipt(data, "receipt.pdf")
+def print_order_history(customer: Customer):
+    data = [["Name", "Item Cost", "Tax"]]
+
+    data.append(["Customer Name", "", customer.customer_name])
+    data.append(["Customer ID", "", customer.customer_id])
+
+    data.append(["Total Orders", "", len(customer.order_history)])
+
+    for order in customer.order_history:
+        order_line = order.__str__().split("\n")
+
+        data.append([""])
+        data.append(["Order Start"])
+        for item in order_line:
+            if len(order_line) == order_line.index(item) + 1:
+                data.append([""])
+                data.append(["Total items in order", "", len(order)])
+                data.append(
+                    ["Subtotal", f"${order.order_cost()}", f"${order.order_tax()}"]
+                )
+                data.append(
+                    [
+                        "Order Total",
+                        "",
+                        f"${round(order.order_cost() + order.order_tax(), 2)}",
+                    ]
+                )
+                data.append(["Paid with ", "", order.get_pay_type()])
+
+            else:
+                splitted = item.split(",")
+                data.append([splitted[0], splitted[-2], splitted[-1]])
+
+    receipt.make_receipt(data, f"receipts/{customer.customer_name}_receipt.pdf")
 
 
 def main():
+    shop = DessertShop()
     orders_finished: bool = False
     prompt = "\n".join(
         [
@@ -175,14 +178,18 @@ def main():
         ]
     )
 
-    create_an_order()
+    item_prompt(shop)
     while not orders_finished:
         choice = input(prompt)
         match choice:
             case "y":
-                create_an_order()
+                item_prompt(shop)
             case _:
                 orders_finished = True
+
+    create_receipt_folder()
+    for customer in shop.customer_db.values():
+        print_order_history(customer)
 
 
 if __name__ == "__main__":
